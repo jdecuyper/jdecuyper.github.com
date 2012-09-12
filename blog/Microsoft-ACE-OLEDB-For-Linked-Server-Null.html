@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>jdecuyper.github.com by jdecuyper</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>jdecuyper.github.com</h1>
+          <h2>Blog entries</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="index.html" class="button"><span><< Blog entries</span></a>
+        </section>
+
+        <hr>
+
+		<h3>“Microsoft.ACE.OLEDB.12.0″ For Linked Server “(Null)” Returned Message “Unspecified Error”</h3>
+        <section id="main_content">
+		
+		<p>September 22, 2011</p>
+		
+		<p>An OLE DB provider is a high level abstraction interface that allows to access data contained inside a simple text file, an excel sheet or other kind of documents that are not necessarily accessible through a language such as SQL. This technology was designed by Microsoft in order to replace the well known ODBC standard. Interestingly, they recently announced that the Redmond company now would align back with ODBC for Native Relational Data Access!</p>
+
+		<p>Whoever as worked with OLE DB and excel files knows that it easily becomes a big pain  ! Most of the time, I try to avoid it but in specific scenarios it becomes unavoidable. If you want to easily and quickly dump data from an excel file into a table with a single SQL statement, it goes as follow:/p>
+		
+		<pre><code>INSERT INTO tblMySpecialData 
+SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0', 'Excel 12.0;Database=C:\HTTP\Excel\MyDataShhet.xls;HDR=YES;IMEX=1',
+'SELECT [NAME], [ADRESS] FROM [Sheet1$]')</code></pre>
+
+		<p>For the record: “<strong>HDR=Yes;</strong>” indicates that the first row contains column names, not data and “<strong>IMEX=1;</strong>” tells the driver to always read “intermixed” data columns as text. You need to know the name of the sheet in order to read the data from it. I use ADO.NET to get the name of the first sheet and pass it over to the stored procedure.</p>
+		
+		<img src="images\ACE-OLEDB-Error.png" alt="ACE OLDB Error" />
+		
+		<p>No error was thrown when this command was executed from within the stored procedure but it just wouldn’t work once executed from MSSQL Server Management Studio! <strong>I’m running a Windows 7 PC and the issue was solved opening the Management Studio with Administrative rights!</strong> Hope it helps someone :)</p
+		
+		</section>
+<!--
+
+
+<p><a href="https://github.com/jdecuyper/select2">jdecuyper/select2</a></p>
+
+<p>Select2 is a great alternative for the standard select box (check it out: <a href="https://github.com/ivaynberg/select2">Select2</a>).</p>
+
+<p>One project required a specific behavior to be added to Select2. When the user clicks on the searchbox, the currently selected value disappears and if you want it back, you need to type it back in.</p>
+
+<p>Since I was going to add several Select2 on the same page containing up to 6000 options each, I needed a way to have the current value available for edit or copy/paste. When clicking on the select box, current value must be displayed as follow:</p>
+
+<img src="images/select2/displayCurrentVal.png" alt="Select2 - Display current value" />
+
+<p>I added a new global boolean value (called <code>keepValOnSearch</code>) that indicates whether or not the current selected option must be displayed or not:</p>
+
+<pre><code>if (initial === true && opts.keepValOnSearch && search.val() == "" && opts.element.attr("multiple") == undefined) { 	 
+	var selected = opts.element.find(":selected");
+	search.val(selected.text());
+}</code></pre>
+
+<p>The selected value is only functional for single select boxes without ajax calls.</p>
+-->
+<!-- <p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+<h3>Support or Contact</h3>
+
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+-->
+        
+
+        <footer>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
