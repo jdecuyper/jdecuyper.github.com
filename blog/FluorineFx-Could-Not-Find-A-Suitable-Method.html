@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>jdecuyper.github.com by jdecuyper</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>jdecuyper.github.com</h1>
+          <h2>Blog entries</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="index.html" class="button"><span><< Blog entries</span></a>
+        </section>
+
+        <hr>
+
+		<h3>FluorineFx – Could Not Find A Suitable Method With Name {0}</h3>
+        <section id="main_content">
+		
+		<p>January 17, 2011</p>
+		
+		<p><a target="_blank" href="http://www.fluorinefx.com/">FluorineFx</a> is a free and open source Flash/Flex remote gateway that allows easy and efficient communication between an Adobe Rich Internet Application and a Microsoft.Net back-end.</p>
+
+		<p>I have been using FluorineFx with several projects since 2007 such as the following website that offers games, contests, customizable pages (myspace-like but simpler  ) for Spanish speaking kids:</p>
+		
+		<p>
+		Using the <a target="_blank" href="http://en.wikipedia.org/wiki/Action_Message_Format">ActionScript Message Format (AMF)</a>, FluorineFx allows to match successfully a remote call from a client to a C# method. Not only method name are matched but also their respective arguments, even custom classes can be passed around.  A conversion table from AS’s types to C#’s types is available if you visit <a target="_blank" href="http://www.fluorinefx.com/docs/fluorine/">FluorineFx’s online documentation</a>.
+		</p>
+		
+		<img src="images\pandilla_telmex.png" alt="La Pandilla Telmex" />
+		
+		<p>
+		So, for example, on the client side you have an AS2 class with a “GetSomething()” remote method and two callback methods (”onSuccess” and “onError”) to process the results or any potential error. If results are received a dispatcher pipes a new event in order to notify all the objects listening to this particular event :
+		</p>
+		
+<pre><code>import mx.events.EventDispatcher;
+import mx.remoting.*;
+import mx.rpc.*;
+
+class com.myCustomClass {
+
+	var __gatewayUrl:String
+	var __pendingCall:PendingCall;
+	var __service:Service;
+
+	function dispatchEvent() {};
+	function addEventListener() {};
+	function removeEventListener() {};
+
+	function myCustomClass(gateway:String) {
+		__gatewayUrl = gateway;
+		mx.events.EventDispatcher.initialize(this);
+	}
+
+	function GetSomething():Void {
+		__service = new Service(__gatewayUrl, null, "MyBackend.MyCustomClass");
+		__pendingCall = __service.GetSomething();
+		__pendingCall.responder = new RelayResponder(this, "onSuccess", "onError");
+	}
+	function onSuccess(re:ResultEvent):Void {
+		var eventObj:Object={target:this,type:"fecha"}
+		eventObj.rs = String(re.result);
+		dispatchEvent(eventObj);
+	}
+
+	function onError(fe:FaultEvent):Void {
+		var getSomethingFault:Fault = fe.fault;
+		trace(getSomethingFault.type);
+		trace(getSomethingFault.description);
+		trace(getSomethingFault.detail);
+		trace(getSomethingFault.faultstring);
+		trace(getSomethingFault.faultcode);
+	}
+}</code></pre>
+
+		<p>And, symmetrically, on the C# side you have a similar class marked with the “RemotingService” attribute which tells the Fluorine engine that this class should be considered when an AMF request comes in:</p>
+
+		<pre><code>using System;
+using FluorineFx;
+
+[RemotingService("MyCustomClass")]
+public class MyCustomClass
+{
+	public MyCustomClass() { }
+
+	// method may or not be static
+	public string GetSomething()
+	{
+		// do some work
+		return "result";
+	}
+}</code></pre>
+		
+		<p>Note that it works the same using an AS3 class with some minor changes. I forked and changed an ActionScript library called <a target="_blank" href="https://github.com/jdecuyper/FluorineFxNetClient">FluorineFxNetClient library at github</a>. It easily allows to connect AS3 classes to a C# backend and avoids repetitive code like the all the dispatching process you saw in the AS2 class above.</p>
+		
+		<p>So, what does FlurioneFx do exactly? Well quite a bit since it reads all HTTP requests with a content type of AMF and tries to find the corresponding method, execute it and return it results back to the client side (if any). By design, all AMF requests are pointing at an ASPX page called: "gateway.aspx". This page is actually an implementation of an HttpModule which is declared in your web.config the following way:</p>
+		
+<pre><code>&lt;httpModules&gt;
+&lt;add name="FluorineGateway" type="FluorineFx.FluorineGateway, FluorineFx" /&gt;
+&lt;/httpModules&gt;
+</code></pre>
+
+		<p>
+		Once the request comes in, a linked-list data structure is created containing at each note a different kind of filter. All filters will be executed one after the other on the AMF request until a match is found. Here is an image of all the filters available, note that all of them are used except for the “CacheFilter” which right now is left out in the last repository update (revision 209):
+		</p>
+
+		<img src="images\fluorine-filters.jpg" alt="Fluorine - AMF filters" />
+		
+		<p>In my case, the most interesting filter is contained inside the “ProcessFilter” class. Inside this class, the lookup for the actual C# method is started. If a corresponding method is found, using C#’s reflection mechanisms, an object from the particular type is created and its method gets executed with the necessary arguments. In case the method is not found, an exception is thrown that reads as follow: “Could not find a suitable method with name {0}”. In most case, the lookup is simply working perfectly. However, on a more heavy application I started to receive some errors from that particular filter. When I mean heavy, I mean something around 60k hits per month, which is really not that much but it is respecting to my small experience as web programmer.</p>
+		
+		<p>I enabled full debug messages and found out that some methods are sometimes perfectly executed and then, a couple of seconds later, are said to be unfindable by the FluorineFx engine! So somehow, in some strange circumstances, existing methods are not found inside a requested type. The problem was cracked by user zieDaniel1 on the <a target="_blank" href="http://code.google.com/p/fluorinefx/issues/detail?id=11">FluorineFx’s forum</a>:</p>
+		
+		<blockquote>The problem is a race condition in FluorineFx/Messaging/Endpoints/Filter/ProcessFilter.cs, lines 152-156. The FactoryInstance that is returned from destination.GetFactoryInstance() on line 152 is shared between threads, and what often happens is that factoryInstance.Source is overwritten by another thread by the time factoryInstance.Lookup() is called! Then, the wrong class is used to find the remote method on, and the method cannot be found.</blockquote>
+		
+		<p>The “FactoryInstance” class is responsible for the lookup procedure. It is only created once and thus shared among threads. Since the logging message was only reporting the name of the unfindable method, I added to it the name of the object on which that lookup was performed. And surprise, when the error is thrown, the method is looked inside the wrong object!</p>
+
+		<p>Before applying any patch to the source code, I wanted to be able to reproduce the error locally. I created a <a target="_blank" href="https://github.com/jdecuyper/FluorineFxNetClient">small C# application that sends AMF HTTP requests to a remote FluorineFx gateway</a>. I could have it done with a Flash application but I found it more flexible to work exclusively with C#. Since I though that the exception would be easily thrown under heavy load I started firing in a loop a bunch of AMF requests working on different threads. After a couple of tries, the error was still not showing up. I changed a bit my approach and decided to send some threads to sleep for half a second based on the name of the method they where looking for. This would give enough time for another thread to override the factoryInstance.Source’s value:</p>
+		
+		<img src="images\thread-to-sleep.jpg" alt="Fluorine - thread to sleep" />
+		
+		<p>That did the trick, the error was thrown on all executions of the C# client application! The next step was to apply the patch proposed by zieDaniel1. The main idea is to simply lock the access to the instance of the “FactoryInstance”. Since a lock can become expensive, I decided to create a small benchmark in order to approximate the performance cost. The lock around the "FactoryInstance" goes as follow:</p>
+		
+<pre><code>object instance;
+FactoryInstance factoryInstance = destination.GetFactoryInstance();
+lock (factoryInstance)
+{
+	factoryInstance.Source = amfBody.TypeName;
+	// query string can override the activation mode
+	if (FluorineContext.Current.ActivationMode != null)
+		factoryInstance.Scope = FluorineContext.Current.ActivationMode;
+	instance = factoryInstance.Lookup();
+}</code></pre>
+		
+		<p>I have been trying to benchmark both DLL (with/without lock) locally and on a remote server but was not able to find any relevant discrepancy between both. I used about 100 methods and stored the time elapsed between the execution and the response. Each method is called fifty times. Results vary very little, between 0 and 25 milliseconds, nothing to be afraid of. The average time with lock is 78 milliseconds and without lock is 75 milliseconds. The results are clearer when visualized as a chart:</p>
+		
+		<img src="images\fluorine-with-and-without-lock.png" alt="Fluorine - thread to sleep" />
+		
+		<p>The X axis represents the fifty executions of all methods. The corresponding value on the Y axis is the average execution time for the 100 methods. Since no relevant performance hit could be detected, I decided to push the new version of FluorineFx to our production server. Since then, no error of such kind has been logged! I submitted a patch to FluorineFx’s mailing list but it seems that changes are no longer made to the source code. So if you are experiencing the same issue, you can contact me and I will be glad to help you out.</p>
+		</section>
+        
+        <footer>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
