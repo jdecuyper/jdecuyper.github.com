@@ -50,7 +50,7 @@
 		
 		<p>An OLE DB provider is a high level abstraction interface that allows to access data contained inside a simple text file, an excel sheet or other kind of documents that are not necessarily accessible through a language such as SQL. This technology was designed by Microsoft in order to replace the well known ODBC standard. Interestingly, they recently announced that the Redmond company now would align back with ODBC for Native Relational Data Access!</p>
 
-		<p>Whoever as worked with OLE DB and excel files knows that it easily becomes a big pain  ! Most of the time, I try to avoid it but in specific scenarios it becomes unavoidable. If you want to easily and quickly dump data from an excel file into a table with a single SQL statement, it goes as follow:/p>
+		<p>Whoever as worked with OLE DB and excel files knows that it easily becomes a big pain  ! Most of the time, I try to avoid it but in specific scenarios it becomes unavoidable. If you want to easily and quickly dump data from an excel file into a table with a single SQL statement, it goes as follow:</p>
 		
 		<pre><code>INSERT INTO tblMySpecialData 
 SELECT * FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0', 'Excel 12.0;Database=C:\HTTP\Excel\MyDataShhet.xls;HDR=YES;IMEX=1',

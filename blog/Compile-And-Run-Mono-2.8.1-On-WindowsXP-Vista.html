@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="../stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>jdecuyper.github.com by jdecuyper</title>
+	
+	<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35502053-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+  </script>
+	
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>jdecuyper.github.com</h1>
+          <h2>Blog entries</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="index.html" class="button"><span><< Blog entries</span></a>
+        </section>
+
+        <hr>
+
+		<h3>Compile And Run Mono 2.8.1 On Windows XP And Vista</h3>
+        <section id="main_content">
+		
+		<p>December 21, 2010</p>
+		
+		<p>Compiling mono on Windows is a bit more complicated than on linux. Fortunately, thanks to <a target="_blank" href="http://shana.worldofcoding.com/en/mono_cygwin_tutorial.html">a post by Andreia Gaita</a>, I got there and came back again "while remaining reasonably sane". I decided to write down my own enlightened path to the compilation of mono on Windows in order to refresh a bit the details about the cygwin dependencies.</p>
+		
+		<p>The key part of the compilation is to have a correct configuration of cygwin installed and also to grab a mono source code that is ready to compile (i.e. with no errors, sometimes the latest clone from github may contain potential problems). After a lots of compiling intents, I learned that the best method was, after each compilation crash, to remove completely cygwin from my system and make a clean install. It was a bit of  a hassle at first but hopefully you will not to go through all this  and have your mono build ready to compile in a couple of minutes.</p>
+		
+		<p>
+		<strong>1. Get cygwin:</strong> <a target="_blank" href="http://www.cygwin.com/">download the latest cygwin executable</a>. I'm running version 1.7.7-1. To find out about the version you are working with, type "uname -a" inside cygwin's console.
+		</p>
+		
+		<p>
+		<strong>2. Get mono source code:</strong> <a target="_blank" href="https://github.com/mono/mono">download the latest stable source code from Github</a>.
+		</p>
+
+		<p>
+		<strong>3. Install mono:</strong><a target="_blank" href="http://www.go-mono.com/mono-downloads/download.html">download the Windows installer</a> and have it executed. I left the mono installation on the following path: "C:\mono" in order to avoid problems with spaces inside directories's names.
+		</p>
+		
+		<p>
+		<strong>4. Install cygwin & packages:</strong> execute the cygwin's installer. In addition to the default packages, install cygwin with the following ones:		
+		</p>
+		
+<pre><code>automake v. 1.11
+bison v. 2.4.2-1
+gcc-core: C compiler v. 3.4.4
+gcc-g++: C++ compiler v. 3.4.4
+gdb: GNU debugger v. 6.8-2
+getttext (version 0.17-11 was already included)
+intltool v. 0.41.1-1
+libiconv v. 1.13.1-1
+libiconv2 (version 1.13.1-1 was already included)
+libtool v. 2.4-1
+pkg-config v. 0.23b-10
+libintl-2 v. 0.12.1-3 (make.exe requires it)
+</code></pre>
+		
+		<p>
+		Do not install make.exe, check to see if it is not added in the default package, mine did not include it but you never know so don't forget to have a look at it. Instead, <a href="http://www.go-mono.com/archive/helper/make-3.80-1.tar.bz2">download the non buggy version (3.80-1) of make.exe from the mono website</a>. Add the make.exe file to cygwin's bin directory:
+		</p>
+		
+		<img src="images/cygwin_make.jpg" alt="Cygwin Make" />
+		<br />
+		<br />
+		<p>
+		<strong>5. Configure cygwin's path:</strong> when you launch the cygwin console for the first time, 3 files are created with your default preferences (.bashrc, .inputrc, .bash_profile). On my Windows XP box, those files are created at "C:\cygwin\home" and on my Windows Vista box at "C:\cygwin\etc\skel". Edit the .bashrc file and add at the end of the file the following lines:
+		</p>
+
+<pre><code>PATH=.:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/cygdrive/c/mono/bin
+PKG_CONFIG_PATH=.:/lib/pkgconfig:/cygdrive/c/mono/lib/pkgconfig
+LD_LIBRARY_PATH=.:/usr/local/lib:/usr/lib:/lib:/cygdrive/c/mono/lib
+export PATH PKG_CONFIG_PATH LD_LIBRARY_PATH
+</code></pre>
+
+		<p>
+		Don't forget to replace "/cygdrive/c/mono/bin", "/cygdrive/c/mono/lib/pkgconfig" and "/cygdrive/c/mono/lib" with the correct location of the mono installation on your system.
+		</p>
+		
+		<p>
+		<strong>6. Launch compilation:</strong> copy the mono source to "C:\cygwin\usr\src". Add the mono's bin ("C:\mono\bin") directory to Windows path. This is important because the compilation process will require an existing gmcs compiler to terminate successfully. Now, launch cygwin's console and once located inside the source directory, execute:
+		</p>
+
+<pre><code>./autogen.sh --prefix=/usr/local &amp;&amp; make &amp;;&amp; make install</pre></code>
+
+		<p>
+		If all goes well, the mono binaries will be created and copied to "C:\cygwin\usr\local". Now remove "C:\mono\bin" from your path, add "C:\cygwin\usr\local\bin" and "C:\cygwin\usr\local\lib") and start coding  .
+		</p>
+		
+		<img src="images/mono_gmcs.jpg" alt="Mono GMCS" />
+		
+		</section>
+       
+        <footer>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
