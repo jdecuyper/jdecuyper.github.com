@@ -70,6 +70,8 @@
 
 <p>The selected value can only be applied to the single select boxes.</p>
 
+<p>&nbsp;</p>
+        
 </article>
 
  <script type="text/javascript">
@@ -195,6 +197,124 @@
                 <option value="WV">West Virginia</option>
             </optgroup>
         </select>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+</article>
+
+<script type="text/javascript">
+      $(document).ready(function () {
+
+          // A list of words will be searched through every time the user starts typing some letter into the the searchbox.
+          // For efficiency purposes, instead of using an array, all words are part of the same string and separated by brackets. 
+          // An array could be used but it would slow down the search, at least if you are are planning to use a large number of 
+          // words, otherwise using an array might be more than enough.
+          // Brackets are used to separate words from each other, it is a limitation because brackets might be part of the words 
+          // but it could be easily replaced by another special character that you know has no occurence inside the list of words.
+          var itemList = '"Pamela Carino""Jeannette Kyler""Burton Holle""Emerita Berney""Jaye Marcial""Mozella Nieto""Conception Winkelman""Blaine Koski""Annalee Worthington""Randa Brosius""Claribel Bialaszewski""Eden Carlino""Lois Benzing""Davina Mcquarrie""Tameka Wait""Virgilio Tardiff""Sage Wendling""Teresa Slover""Art Covarrubias""Gertrude Gomez""Concetta Evers""Suellen Belmont""Daine Easterly""Gregorio Doolittle""Laveta Callaghan""Erma Riel""Daryl Helvey""Lakisha Matias""Celina Sasaki""Daina Fyfe""Maryalice Frizell""Velma Kos""Rolf Goins""Mason Manske""Glendora Mikels""Elease Tomasini""Steven Defranco""Arla Keister""Samara Ballow""Karena Elliston""Myesha Selig""Jamison Richard""Fumiko Martens""Marcy Bertin""Ardis Torry""Annice Cashin""Lachelle Boulay""Maribel Goodrich""Destiny Hermann""Crista Mcclelland"';
+          
+          // Initialize all select2 hidden inputs inside the holder
+          $('#select2RegexHolder input[type="hidden"]').each(function (index) {
+
+             $(this).select2({
+                allowClear: true,
+                minimumInputLength: 1,
+                placeholder: "Select an option",
+                query: function (query) {
+                    var search = query.term;
+                    var resultsText = $('#results_text');
+                    var resultsCount = $('#results_count');
+                    // prevent starting the search if no search term was provided
+                    if (!search) {
+                        resultsText.val('');
+                        resultsCount.val('0');
+                        return;
+                    }
+                    var data = { results: [] }, i, j, s;
+                    // use regular expression to find all entries matching the search term
+                    // the gi modifier is used to do a case insensitive search
+                    var rx = new RegExp('"([^"]*' + search + '[^"]*)"', 'gi');
+                    var i = 0, results = '';
+                    // obtain all matches and push them inside the result list that will be displayed 
+                    while (result = rx.exec(itemList)) {
+                        data.results.push({ id: result[1], text: result[1] });
+                        i += 1;
+                        if (i >= 100) // only 100 results are shown at a time
+                            break;
+                    }
+                    resultsText.val(results);
+                    resultsCount.val(i);
+                    query.callback(data);
+                }
+            });
+
+          });
+      });
+</script>
+
+<article>
+<h3 id="RegexQuery">Select 2: use regular expression to search through huge list</h3>
+
+    <div id="select2RegexHolder">
+
+        <p>Following example is based on select2 SHA: <a target="_blank" href="https://github.com/ivaynberg/select2/tree/24716bc872a99d8c51e1a113186a60382b7c6ad9">24716bc872</a>.</p>
+
+        <p>A list of words will be searched through every time the user starts typing some letter into the the searchbox.
+          For efficiency purposes, instead of using an array, all words are part of the same string and separated by brackets.</p>
+          
+        <p>An array could be used but it would slow down the search, at least if you are are planning to use a large number of 
+          words, otherwise using an array might be more than enough. Brackets are used to separate words from each other, it is a limitation because brackets might be part of the words 
+          but it could be easily replaced by another special character that you know has no occurence inside the list of words.
+        </p>
+        
+        <p>Both select2 controls are initialized at the same time, use the same search query and the same data source.</p>
+        
+        <div>
+        <input id="select2ExampleA" style="width:500px;" type="hidden" />
+        </div>
+
+        <p></p>
+        
+        <div>
+        <input id="select2ExampleB" style="width:500px;" type="hidden" />
+        </div>
+        
+        <p></p>
+        
+        <p>The data source contains 50 random names, here is how the beginning of the list looks:</p>
+                
+<pre><code>var itemList = '"Pamela Carino""Jeannette Kyler""Burton Holle""Emerita Berney""Jaye Marcial"';</code></pre>
+
+        <p>The search query goes as follow:</p>
+        
+<pre><code>query: function (query) {
+    var search = query.term;
+    var resultsText = $('#results_text');
+    var resultsCount = $('#results_count');
+    // prevent starting the search if no search term was provided
+    if (!search) {
+        resultsText.val('');
+        resultsCount.val('0');
+        return;
+    }
+    var data = { results: [] }, i, j, s;
+    // use regular expression to find all entries matching the search term
+    // the gi modifier is used to do a case insensitive search
+    var rx = new RegExp('"([^"]*' + search + '[^"]*)"', 'gi');
+    var i = 0, results = '';
+    // obtain all matches and push them inside the result list that will be displayed 
+    while (result = rx.exec(itemList)) {
+        data.results.push({ id: result[1], text: result[1] });
+        i += 1;
+        if (i >= 100) // only 100 results are shown at a time
+            break;
+    }
+    resultsText.val(results);
+    resultsCount.val(i);
+    query.callback(data);
+}</code></pre>
+
+        <p>Have a look at the source code of this page to see how it works</p>
+    </div>
 
 </article>
 </section>
