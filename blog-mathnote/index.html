@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>JQuery mathnote plugin</title>
+<!-- Copyright (c) 2012 Design Science, Inc. -->
+<!-- Adapted from http://cdn.mathjax.org/mathjax/latest/test/examples.html -->
+
+<!-- 
+TODO
+    - Create divs on the fly
+    - Create callback whenever user stops editing (should contain the math content
+    - Handle \r\n and <br />
+    - Add demo to blog
+    - Review writemaths and check for improvements: https://github.com/christianp/writemaths
+-->
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<style type="text/css">
+.input 
+{
+    width:400px;
+    margin-top:5px;
+    font-family:Times New Roman;
+    border:dashed 1px orange;
+}
+
+.preview 
+{
+    border:1px solid; 
+    padding: 3px; 
+    width:400px; 
+    margin-top:5px;
+    background-color:#faee76;    
+}
+
+.buffer
+{
+    border:1px solid; 
+    padding: 3px; 
+    width:400px; 
+    margin-top:5px;
+    background-color:#faee76;
+    top:0; 
+    left: 0;
+}
+</style>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    showProcessingMessages: false,
+    tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+  });
+</script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script>
+<script type="text/javascript" src="mathnote.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#note1').MathNote();
+        $('#note2').MathNote();
+        $('#note3').MathNote();
+        $('#note4').MathNote();
+    });
+</script>
+</head>
+<body>
+
+<div style="left:50%;margin-left:-360px;position:absolute;z-index:-1;">
+    <img src="BackgroundMathJax.png" alt="Introduction to mathnote" />
+</div>
+
+    <div id="note1">
+        <textarea id="Textarea1" class="input" cols="4" rows="6">When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are:$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</textarea>
+        <div id="testMathPreview" class="preview"></div>
+        <div id="testMathBuffer" class="buffer" style="visibility:hidden; position:absolute;"></div>
+    </div>
+
+    <div id="note2">
+        <textarea id="Textarea2" class="input" cols="4" rows="6">\[P(E) = {n \choose k} p^k (1-p)^{ n-k} \]</textarea>
+        <div id="Div2" class="preview"></div>
+        <div id="Div3" class="buffer" style="visibility:hidden; position:absolute;"></div>
+    </div>
+    
+     <div id="note3">
+        <textarea id="Textarea3" class="input" cols="4" rows="6">\begin{align}
+  \nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} & = \frac{4\pi}{c}\vec{\mathbf{j}} \\
+  \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
+  \nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
+  \nabla \cdot \vec{\mathbf{B}} & = 0
+\end{align}</textarea>
+        <div id="Div4" class="preview"></div>
+        <div id="Div5" class="buffer" style="visibility:hidden; position:absolute;"></div>
+    </div>
+
+     <div id="note4">
+        <textarea id="Textarea4" class="input" cols="4" rows="6">\[\left( \sum_{k=1}^n a_k b_k \right)^{\!\!2} \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)\]</textarea>
+        <div id="Div6" class="preview"></div>
+        <div id="Div7" class="buffer" style="visibility:hidden; position:absolute;"></div>
+    </div>
+
+
+
+
+</body>
+</html>
