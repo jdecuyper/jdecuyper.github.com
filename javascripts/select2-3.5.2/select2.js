@@ -3188,7 +3188,7 @@ the specific language governing permissions and limitations under the Apache Lic
         processDuplicatedResults: function () {
             var itemIDs = "";
             for (var i = 0, j = this.valWithDuplicate.length; i < j; i = i + 1)
-                itemIDs += this.valWithDuplicate[i] + "|";
+                itemIDs += this.valWithDuplicate[i] + this.opts.separator;
                
             if(itemIDs != ""){
                 itemIDs = itemIDs.slice(0,itemIDs.length - 1);
