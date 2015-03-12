@@ -64,7 +64,24 @@
         <li>To enable repeated items, set the <i>allowRepetitionForMultipleSelect</i> property to <i>true</i> when calling select2 on an HTML control</li>
         <li>Works only with <i>select</i> HTML tags (I haven't tested with a hidden field)</li>
         <li>You can preload data using the <i>selectedItemsForMultiple</i> attribute</li>
-        <li>A nicer approach would be to create an additional class called <i>multi-repetition</i> for instance and overwrite the needed functionality</li>
+        <li>Why there is no nice and elegant solution? select2 uses the <code>select</code> HTML element to keep track of selected <code>options</code>.<br />So every time a new value is selected, the <code>setVal</code> (select2, see below) method is called which in turns calls the <code>val</code> (jQuery) method on the <code>select</code> HTML element.<br />If a value is selected twice or more then the <code>val</code> method will select the same <code>option</code> again and keep no information regarding how many times it was selected and in which order. 
+        <br />The way select2 stores selected options could be altered but that would introduce too many changes for such a trivial requirement.
+<pre><code>
+// multi
+setVal: function (val) {
+    var unique;
+    if (this.select) {
+        this.select.val(val);
+    } else {
+        unique = [];
+        // filter out duplicates
+        $(val).each(function () {
+            if (indexOf(this, unique) < 0) unique.push(this);
+        });
+        this.opts.element.val(unique.length === 0 ? "" : unique.join(this.opts.separator));
+    }
+}
+</code></pre>
     </ul>
    
     <h3>

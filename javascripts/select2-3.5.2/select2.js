@@ -3107,7 +3107,7 @@ the specific language governing permissions and limitations under the Apache Lic
             
             // @jdecuyper 
             // After an item was selected, recreate the custom list containing the selected items.
-            // The list is stored inside a HTML hidden field and can be retrieved by C# code once the page is posted 
+            // The list is stored inside a HTML hidden field and can be retrieved once the page is posted 
             // back to the server. The name of the hidden field is defined by another custom attribute called 'idForHiddenField'.
             if(this.opts.allowRepetitionForMultipleSelect) {
                 
