@@ -37,12 +37,37 @@
             $("#m1").select2({ 
                 allowRepetitionForMultipleSelect: true
             });
-            
-            $("#m2").select2();
-            
+            var selectedM1 = [{id:'CA',text:'California'},{id:'AZ',text:'Arizona'},{id:'CA',text:'California'}]
+            $("#m1").select2('data', selectedM1);
             $("#bt1").click(function () { alert("Selected value(s): "+$("#m1").select2("val"));});
             $("#bt2").click(function () { alert("Non filtered selected value(s): "+$("#m1-selection-no-filter").val());});
+            
+            $("#m2").select2();
             $("#bt3").click(function () { alert("Selected value(s): "+$("#m2").select2("val"));});
+            
+            $("#m3").select2({
+            allowRepetitionForMultipleSelect: true,
+            multiple: true,
+            data: [
+                {id: 0, text: 'task A'},
+                {id: 1, text: 'task B'},
+                {id: 2, text: 'task C'},
+                {id: 3, text: 'revision A'},
+                {id: 4, text: 'revision B'},
+                {id: 5, text: 'revision C'}
+                ]
+            });
+        
+            var selected = [
+                {id: 0, text: 'task A'},
+                {id: 1, text: 'task B'},
+                {id: 0, text: 'task A'},
+                {id: 3, text: 'revision A'},
+                {id: 3, text: 'revision A'}
+            ]
+            $("#m3").select2('data', selected);
+            $("#bt4").click(function () { alert("Selected value(s): "+$("#m3").select2("val"));});
+            $("#bt5").click(function () { alert("Non filtered selected value(s): "+$("#m3-selection-no-filter").val());});
         });
     </script>
     
@@ -50,19 +75,19 @@
 
   <body>
 
-    <h3>Multiple select2 with preselected data and repeated items</h3>
+    <h3>Multiple select2 and duplicated items</h3>
     
     <p>The select2 plugin is great and works quite well for non-repeated items. However if you want to allow the user to select the same item multiple times then you might get into trouble (as I did).</p>
     
-    <p>select2 was not built with this idea of duplicated items in mind but since I needed it I had to force/hack this idea into it :)</p>
+    <p>select2 was not built with this idea of duplicated items in mind but since I needed it I had to hack this concept into it :)</p>
     
     <ul>
         <li>I use the <a href="https://github.com/select2/select2/releases/tag/3.5.2" target="_blank">select2 3.5.2 stable build</a> (last release before the breaking changes introduced in 4.0.0)</li> 
-        <li>Look for my comments under @jdecuyper (<a href="../javascripts/select2-3.5.2/select2.js" target="_blank">7 changes</a>)</li>
+        <li>Look for my comments under @jdecuyper (<a href="../javascripts/select2-3.5.2/select2.js" target="_blank">6 changes</a>)</li>
         <li>I use a hidden field to keep track of the duplicated items. I prefered not to alter the way select2 handles his data structure and treats duplicates as it would have caused too many changes.</li>
         <li>The hidden field is called <i>"[id of your control]-selection-no-filter"</i></li>
         <li>To enable repeated items, set the <i>allowRepetitionForMultipleSelect</i> property to <i>true</i> when calling select2 on an HTML control</li>
-        <li>Works only with <i>select</i> HTML tags (I haven't tested with a hidden field)</li>
+        <li>Works with <i>select</i> HTML tags and hidden input</li>
         <li>You can preload data using the <i>selectedItemsForMultiple</i> attribute</li>
         <li>Why there is no nice and elegant solution? select2 uses the <code>select</code> HTML element to keep track of selected <code>options</code>.<br />So every time a new value is selected, the <code>setVal</code> (select2, see below) method is called which in turns calls the <code>val</code> (jQuery) method on the <code>select</code> HTML element.<br />If a value is selected twice or more then the <code>val</code> method will select the same <code>option</code> again and keep no information regarding how many times it was selected and in which order. 
         <br />The way select2 stores selected options could be altered but that would introduce too many changes for such a trivial requirement.
@@ -85,7 +110,7 @@ setVal: function (val) {
     </ul>
    
     <h3>
-    Allow items to be repeated wit preselection
+    Allow items to be repeated (<code>select</code> tag)
     </h3>
     
     <select multiple name="m1" id="m1" selectedItemsForMultiple="[{id:'CA',text:'California'},{id:'AZ',text:'Arizona'},{id:'CA',text:'California'}]"  style="width:500px" class="populate"></select>&nbsp;&nbsp;<input id="bt1" name="bt1" type="button" value="Show selected items from select2" />&nbsp;&nbsp;<input id="bt2" name="bt2" type="button" value="Show selected items from hidden field" />
@@ -93,12 +118,24 @@ setVal: function (val) {
     <p>&nbsp;</p>
     
     <h3>
-    Default select2 behavior
+    Default behavior i.e. no repetition (<code>select</code> tag)
     </h3>
     
     <div>
     <select multiple name="m2" id="m2" style="width:500px" class="populate"></select>&nbsp;&nbsp;<input id="bt3" name="bt3" type="button" value="Show selected items" />
     </div>
+    
+    <p>&nbsp;</p>
+        
+    <h3>
+    Allow items to be repeated with preselection (hidden input)
+    </h3>
+    
+    <input type="hidden" id="m3" name="m3" style="width:500px" class="populate" />&nbsp;&nbsp;
+    <input id="bt4" name="bt4" type="button" value="Show selected items from select2" />&nbsp;&nbsp;
+    <input id="bt5" name="bt5" type="button" value="Show selected items from hidden field" />
+    
+    <p>&nbsp;</p>
     
     <select style="width:300px;display:none;" id="source">
        <optgroup label="Alaskan/Hawaiian Time Zone">

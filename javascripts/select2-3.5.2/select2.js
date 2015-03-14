@@ -2882,12 +2882,6 @@ the specific language governing permissions and limitations under the Apache Lic
                 var self = this;
                 
                 this.opts.initSelection.call(null, this.opts.element, function(data){
-                
-                    // @jdecuyper
-                    // Overwrite the existing selected items with the ones provided by the custom attribute 'selectedItemsForMultiple', if provided
-                    if (self.opts.allowRepetitionForMultipleSelect)
-                        data = eval(self.opts.multipleSelectedItems);
-                    
                     if (data !== undefined && data !== null) {
                         self.updateSelection(data);
                         self.close();
@@ -3460,10 +3454,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
 
                 // @jdecuyper
-                // If the select control is of type multiple, try to load the preselected items from a custom attribute called 'selectedItemsForMultiple'
-                // Using this attribute will short-circuit the standard method that preloads selected items and allow you to preselect repeated items.
                 if (multiple) {
-                    opts.multipleSelectedItems = opts.element.attr("selectedItemsForMultiple");
                     opts.allowRepetitionForMultipleSelect = opts.allowRepetitionForMultipleSelect == undefined ? false : opts.allowRepetitionForMultipleSelect;
                 }
                 
