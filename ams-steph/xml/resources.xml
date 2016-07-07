@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- file delle labels -->
+	<path_labels>xml/labels.xml</path_labels>
+	<path_demo>_elencoDemo/elenco.xml</path_demo>
+
+
+  <!-- Tag speciale per abilitare le statistiche -->
+	<tagging>
+		<!-- Funzione javascript da chiamare -->
+		<jsfunction>callTagAlias</jsfunction>
+		<!-- Abilita/disabilita il tagging -->	
+		<enabled>true</enabled>
+		<!-- Elenco coppie id-tag -->
+		<tags>
+			<tag id="hp">Home</tag>
+		</tags>
+	</tagging>
+</root>
