@@ -1,7 +1,7 @@
 (function() {
   document.writeln('<script type="text/javascript" src="libs/createjs/easeljs-0.6.0.min.js"></script>');
-  document.writeln('<script type="text/javascript" src="libs/createjs/preloadjs-0.3.0.min.js"></script>');
-  document.writeln('<script type="text/javascript" src="libs/createjs/soundjs-0.4.0.min.js"></script>');
+  document.writeln('<script type="text/javascript" src="libs/createjs/preloadjs-0.6.2.min.js"></script>');
+  document.writeln('<script type="text/javascript" src="libs/createjs/soundjs-0.6.2.min.js"></script>');
   document.writeln('<script type="text/javascript" src="libs/createjs/tweenjs-0.4.0.min.js"></script>');
 	document.writeln('<script type="text/javascript" src="libs/createjs/movieclip-0.6.0.min.js"></script>');
 	document.writeln('<script type="text/javascript" src="libs/createjs/ColorFilter.js"></script>');
