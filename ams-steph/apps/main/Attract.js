@@ -322,6 +322,8 @@ Attract.prototype.setCoutdown = function(){
        jQuery(stage.canvas).css("cursor","default");
     }
     cnt.onClick = function(){
+		jQuery("#player1").show();
+	    jQuery("#player2").show();
 	   cnt.ct.startGame();
     }
 	
