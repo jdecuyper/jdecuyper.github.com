@@ -80,7 +80,7 @@ PenaltyMatch.prototype.someoneHasWon = function(){
 		return 1
 	}
 
-	// @jdecuyper: if draw after 5 shots then move on to end screen
+	// @jdecuyper: if draw after 10 shots then move on to end screen
 	if (round == 10)
 		return 0;
 
