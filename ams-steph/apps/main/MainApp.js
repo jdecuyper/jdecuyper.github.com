@@ -148,11 +148,23 @@ function endMatch(details){
 	// @jdecuyper: do not display final score
 	//jQuery("#lblpoint").html(""+curScreen.playerScore+"&nbsp;&nbsp;&nbsp;PTS");
 	jQuery("#divshare").show();
+	
+	setInterval(displayRandomScore1, 500);
+	setInterval(displayRandomScore2, 400);
+	
 	Pqp.addClick(jQuery(".imgPlayagain"),onPlayAgain);
 	Pqp.addClick(jQuery(".imgFb"),onShareFb);
 	if (curScreen.goal0 < curScreen.goal1){
 		jQuery(".imgGameOver").attr("src","img/gameOverLose.png");
 	}
+}
+
+function displayRandomScore1(){
+	jQuery("#player1Score").text(Math.floor(Math.random() * 99) + 1);	
+}
+
+function displayRandomScore2(){
+	jQuery("#player2Score").text(Math.floor(Math.random() * 99) + 1);	
 }
 
 function onShareFb(){
