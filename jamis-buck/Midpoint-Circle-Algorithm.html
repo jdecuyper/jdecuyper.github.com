@@ -1,0 +1,132 @@
+<body id="home">
+
+   <h1>Challenge #11 - Midpoint circle algorithm</h1>
+
+   <p>
+      My take on the <a target="_blank" href="http://weblog.jamisbuck.org/2016/10/8/weekly-programming-challenge-11.html">11th weekly challenge by Jamis Buck</a>.
+   </p>
+   <p>
+   In computer graphics, the midpoint circle algorithm is an algorithm used to determine the points needed for rasterizing a circle
+   (source: <a target="_blank" href="https://en.wikipedia.org/wiki/Midpoint_circle_algorithm">wikipedia</a>). 
+   </p>
+   
+   <p>This is a very naive and not efficient implementation of the Midpoint circle algorithm but it simple to grasp and is a good starting point.</p>
+   <div style="margin-bottom: 10px;">
+   <div>Radius: <input id="radius" /></div>
+   <div>Origin (x0): <input id="originX" /></div>
+   <div>Origin (y0): <input id="originY" /></div>
+   <div><input id="go" type="button" value="Draw Circle" onclick="javascript:drawCircle(document.getElementById('originX').value, document.getElementById('originY').value, document.getElementById('radius').value);" /></div>
+   </div>
+   
+   <canvas id="scene" width="500" height="500"></canvas>
+
+</body>
+
+<script>
+    // Draw initial circle
+    window.addEventListener("load", function(){ drawCircle(); }, false);
+
+    var canvas = document.getElementById('scene');
+    var cWidth = canvas.width;
+    var cHeight = canvas.height;
+    var context = canvas.getContext('2d');
+
+    // Point object
+    point = function(x, y) {
+        if (!x) var x = 0;
+        if (!y) var y = 0;
+        return {
+            x: x,
+            y: y,
+        };
+    }
+    
+    function drawCircle(originX, originY, radius) {
+
+        clearScreen();
+        drawBackground();
+
+        // If no origin is provided then draw circle in the middle 
+        // of the canvas
+        var r = radius ? parseInt(radius) : 200;
+        var x0 = originX ? parseInt(originX) : cWidth/2;
+        var y0 = originY ? parseInt(originY) : cWidth/2;
+
+        document.getElementById('radius').value = r;
+        document.getElementById('originX').value = x0;
+        document.getElementById('originY').value = y0;
+        
+        draw(x0, y0, r);
+
+        function draw(x0, y0, r){
+            
+            var x = 0;
+            var y  = r;
+            var h = 1 - r; // decision parameter's initial value
+
+            while (y > x){
+                
+                // 1st octant
+                drawPoint(x0 + x, y0 - y);
+                
+                // 2nd octant  
+                drawPoint(x0 + (-x), y0 - y);
+                
+                // 3rd octant 
+                drawPoint(x0 + (-y), y0 - x);
+                
+                // 4th octant
+                drawPoint(x0 + (-y), y0 - (-x));
+                
+                // 5th octant
+                drawPoint(x0 + (-x), y0 - (-y));
+                
+                // 6th octant
+                drawPoint(x0 + x, y0 - (-y));
+                
+                // 7th octant
+                drawPoint(x0 + y, y0 - (-x));
+                
+                // 8th octant
+                drawPoint(x0 + y, y0 - x);
+                
+                if (h <= 0){
+                    // decision factor is negative or equal to 0 which means the middle point
+                    // is contained inside the circle, therefore we select the point above it.
+                    h = h + 2*x + 3;
+                } else {
+                    // Decision factor is postive which means the middle point
+                    // is outside the circle, therefore we select the point below it.
+                    h = h + 2*(x-y) + 5;
+                    y--;
+                }
+                x++;
+            }
+        }
+        
+        function clearScreen(){
+            context.clearRect(0, 0, cWidth, cHeight);
+        }
+        
+        function drawBackground() {
+            context.fillStyle = "#000000";
+            context.fillRect(0, 0, cWidth, cHeight);
+        }
+        
+        function drawPoint(x, y, radius, color) {
+            
+            if (!radius)
+                radius = 1
+
+            if (!color)
+                color = "#ffffff";
+
+            context.fillStyle = color;
+            context.beginPath();
+            context.arc(x, y, radius, 0, 2 * Math.PI);
+            context.closePath();
+            context.fill();
+        }
+    }
+
+</script>
