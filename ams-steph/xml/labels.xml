@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <labels>
+    <!-- Generiche -->
+    <str name="app.mesi"><![CDATA[Gennaio|Febbraio|Marzo|Aprile|Maggio|Giugno|Luglio|Agosto|Settembre|Ottobre|Novembre|Dicembre]]></str>
+    <str name="app.giorni"><![CDATA[Domenica,Lunedì,Martedì,Mercoledì,Giovedì,Venerdì,Sabato]]></str>
+    <!-- app -->
+    <str name="app.helloworld"><![CDATA[Hello world!]]></str>
+  </labels>
+</root>

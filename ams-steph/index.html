@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Amaury & Stéphanie 2016</title>
+<meta name="title" content="Amaury & Stéphanie - Kick And Wed Penalty Ace!">
+<meta name="description" content="In this webapp you can play an entire penalty game with the look and feel of Kick and Run (Taito 1986, also known as Mexico'86)!">
+<meta name="author" content="Karza">
+
+<meta property="og:image" content="http://www.int33h.com/test/knr/img/knrlogobig.jpg"/>
+<meta property="og:url" content="http://www.int33h.com/test/knr/"/>
+<meta property="og:title" content="Kick And Run Penalty Ace!"/>
+<meta property="og:description" content="In this webapp you can play an entire penalty game with the look and feel of Kick and Run (Taito 1986, also known as Mexico'86)!"/>
+
+<meta name="author" content="Karza (customized by jdecuyper)">
+
+<link rel="stylesheet" href="css/screen.css">
+<script type="text/javascript" src="libs/include_libs.js"></script>
+<script type="text/javascript" src="apps/include_apps.js"></script>
+<script>
+$(document).ready(init);
+
+function init(){
+  // Visualizza il preloader
+  initPreloaderApp();
+  // Inizializza l'app
+  var pathRes = "xml/resources.xml"
+  setTimeout(function(){initMainApp(pathRes)} , Const.TEMPO_MINIMO_PRELOADING);
+}
+
+function callTagAlias(parm){
+  
+}
+</script>
+</head>
+
+<body>
+<div id="linkInt33" style="display:none">
+<a href="http://www.int33h.com/"><img src="http://www.int33h.com/img/logoRound.png"></a>
+</div>
+
+<!-- preloader -->
+<div class="preloaderApp">
+<img class="clipLoader" src="img/preloader/preloader.gif">
+<label class="lblLoader">Loading wedding game resources (0%)</label>
+</div>
+
+<div style="margin-top: 10px;"></div>
+
+<!-- main app -->
+
+<table border="0" style="width:100%">
+<tr>
+<td style="width:400px;">
+	<div id="player1" style="text-align: center; background-color:red; width:100%;display:none;">
+		<img class="player1" width="200px;" style="display: block; margin: auto auto;" src="img/player1.jpg" />
+		<div>
+		<label id="player1Score" style="font-size:100px; cursor:pointer;" class="arcadfnt" onclick="var n = Number(this.textContent); n++; if (n > 15) n = 0; this.textContent = n;">0</label>
+		</div>
+	</div>
+</td>
+<td>
+	<div class="mainApp">
+			
+		<canvas id="stage" width="1024" height="896"></canvas>
+			
+		<div id="divscore">
+			<label id="score" class="arcadfnt">0</label>
+		</div>
+		<div id="divsequenza">
+			<div id="divteam0"></div>
+			<div id="divteam1"></div>
+			<img src="" align="right" id="tmpSeq"></img>
+		</div>
+		<div id="divshare" style="display:none;">
+			<img class="imgGameOver" src="img/gameOverWin.png">
+			<img class="loveAgain" width="1024px;" src="img/loveAgainAgain.jpg" />
+			<label id="lblshare" class="arcadfnt">Share&nbsp;&nbsp;&nbsp;your&nbsp;&nbsp;&nbsp;score&nbsp;&nbsp;&nbsp;and&nbsp;&nbsp;&nbsp;love!</label>
+		</div>
+
+	  <div id="istruzioni" style="display:none">
+		  <img src="img/logoTaito.jpg" align="left"><label>Released by <b>Taito</b> in 1986, <b>Kick and Run</b>, also known as <b>Mexico'86</b>, was one of my favorite arcade soccer games and so I decided<br>to make this small webapp where you can play an entire penalty game.<br>
+		  This webapp was build mainly using <a target="_blank" href="http://www.createjs.com/">CreateJs</a>, a very powerful suite of Javascript libraries for easy programming with HTML5.
+			</label>
+	  </div>  
+	  
+	</div>
+</td>
+<td style="width:400px;">
+	<div id="player2" style="text-align: center; background-color:blue; width:100%;display:none;">
+		<img class="player2" width="200px;" style="display: block; margin: auto auto;" src="img/player2.jpg" />
+		<div>
+		<label id="player2Score" style="font-size:100px; cursor:pointer;"class="arcadfnt" onclick="var n = Number(this.textContent); n++; if (n > 15) n = 0; this.textContent = n;">0</label>
+		</div>
+	</div>
+</td>
+</tr>
+</table>
+
+<!-- library -->
+<div id="library" class="library"></div>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<demos>
+		<demo>
+			<id>knr</id>
+			<img><![CDATA[http://www.int33h.com/test/knr/img/knrlogosmall.jpg]]></img>
+			<text><![CDATA[<a href="http://www.int33h.com/test/dm/">Kick And Run Penalty Ace!</a> in HTML5/JS, VERY interactive, works on mobile too]]></text>
+		</demo>
+		<demo>
+			<id>dm</id>
+			<img><![CDATA[http://www.int33h.com/test/dm/img/dmlogo.png]]></img>
+			<text><![CDATA[<a href="http://www.int33h.com/test/dm/">Dungeon Master - "Social demo"</a> in HTML/JS, VERY interactive, works on mobile too]]></text>
+		</demo>
+		<demo>
+			<id>mi</id>
+			<img><![CDATA[http://www.int33h.com/test/mi/img/icona90mi.jpg]]></img>
+			<text><![CDATA[<a href="http://www.int33h.com/test/mi/">Monkey Island - Insult Swordfighting Game</a> in HTML/JS, VERY interactive, works on mobile but with smaller spritesheets]]></text>
+		</demo>
+		<demo>
+			<id>bb</id>
+			<img><![CDATA[http://www.int33h.com/test/bb/img/logoBB.png]]></img>
+			<text><![CDATA[<a href="http://www.int33h.com/test/bb/">Bubble Bobble</a> Demo in HTML/JS, interactive]]></text>
+		</demo>
+		<demo>
+			<id>tf</id>
+			<img><![CDATA[http://www.int33h.com/test/tf/img/logoTnf.png]]></img>
+			<text><![CDATA[<a href="http://www.int33h.com/test/tf/">Track & Field</a> Demo in HTML/JS, interactive, using HTML5 canvas]]></text>
+		</demo>
+		<demo>
+			<id>sotb</id>
+			<img><![CDATA[http://www.int33h.com/test/sotb/sotb.png]]></img>
+			<text><![CDATA[<a href="http://www.int33h.com/test/sotb/">Shadow of the Beast</a> Demo in HTML/JS, not interactive]]></text>
+		</demo>
+		<demo>
+			<id>sotc</id>
+			<img><![CDATA[http://www.int33h.com/test/sotc/sotc.png]]></img>
+			<text><![CDATA[<a href="http://www.int33h.com/test/sotc/">Shadow of the Beast</a> Demo in HTML/JS, not interactive, using HTML5 canvas]]></text>
+		</demo>
+		<demo>
+			<id>shadow</id>
+			<img><![CDATA[http://www.int33h.com/test/shadow/shadow.png]]></img>
+			<text><![CDATA[<a href="http://www.int33h.com/test/shadow/">Shadow of the Beast</a> Demo in HTML/JS, interactive]]></text>
+		</demo>
+	</demos>
+</root>
