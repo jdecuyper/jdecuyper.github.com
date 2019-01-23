@@ -3166,8 +3166,10 @@ the specific language governing permissions and limitations under the Apache Lic
             
                 var idToRemove = this.id(data);
                 for (var i = 0, j = this.valWithDuplicate.length; i < j; i = i + 1) {
-                    if(this.valWithDuplicate[i] == idToRemove)
+                    if(this.valWithDuplicate[i] == idToRemove) {
                         this.valWithDuplicate.splice(i, 1);
+                        break;
+                    }
                 }
 
                 this.processDuplicatedResults();
@@ -3185,7 +3187,7 @@ the specific language governing permissions and limitations under the Apache Lic
                 itemIDs += this.valWithDuplicate[i] + this.opts.separator;
                
             if(itemIDs != ""){
-                itemIDs = itemIDs.slice(0,itemIDs.length - 1);
+                itemIDs = itemIDs.slice(0, this.opts.separator.length - 1);
                     
                 var hf = document.getElementById(this.opts.element.attr("id") + "-selection-no-filter");
                 if(hf == undefined) {
